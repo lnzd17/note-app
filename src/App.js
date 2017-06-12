@@ -25,14 +25,14 @@ class App extends Component {
 
   getNotes = () => {
     axios.get(urlFor('notes'))
-    .then((res) => this.setState({ notes: res.data }) )
-    .catch( (err) => console.log(err.response.data) );
+    .then((res) => this.setState({ notes: res.data }))
+    .catch( (err) => console.log(err.response.data));
   }
 
   getNote = (id) => {
     axios.get( urlFor( `notes/${id}` ) )
-    .then( (res) => this.setState( {note: res.data, showNote: true} ) )
-    .catch( (err) => console.log(err.response.data) );
+    .then( (res) => this.setState( {note: res.data, showNote: true}))
+    .catch( (err) => console.log(err.response.data));
   }
 
   performSubmissionRequest = (data, id) => {
@@ -49,7 +49,12 @@ class App extends Component {
     .catch( (err) => console.log(err.response.date) );
   }
 
-
+  deleteNote = (id) => {
+    const newNotesState = this.state.notes.filter( (note) => note.id !== id);
+    axios.delete(urlFor(`notes/${id}`))
+    .then( (res) => this.setState( { notes: newNotesState }))
+    .catch( (err) => console.log(err.response.data));
+  }
 
   render() {
     const { showNote, notes, note } = this.state;
@@ -66,6 +71,7 @@ class App extends Component {
             getNotes={this.getNotes}
             notes={notes}
             getNote={this.getNote}
+            deleteNote={this.deleteNote}
           /> }
       </div>
     );
