@@ -40,7 +40,7 @@ class Note extends React.Component {
           <input className="note-button" type="submit" value="Submit" />
         </form>
         <div className="tag-container">
-          <div classname="tag-button-container">
+          <div className="tag-button-container">
             {this.renderTagForm()}
           </div>
         </div>
