@@ -19,6 +19,15 @@ class App extends Component {
     };
   }
 
+  getErrorMessage = (fields, err) => {
+    const {errors} = err.response.data;
+    fields.forEach((field) => {
+      if(errors[field]) {
+        this.setState({error: field + ' ' + errors[field]});
+      }
+    });
+  };
+
   toggleNote = () => {
     this.setState({
       showNote: ! this.state.showNote,
@@ -50,12 +59,13 @@ class App extends Component {
     this.performSubmissionRequest(data, id)
     .then( (res) => this.setState( { showNote: false } ) )
     .catch( (err) => {
-      const { errors } = err.response.data;
-      if (errors.content){
-        this.setState({error: 'Missing Note Content!'});
-      }else if (errors.title) {
-        this.setState({error: 'Missing Note Title!'});
-      }
+      // const { errors } = err.response.data;
+      // if (errors.content){
+      //   this.setState({error: 'Missing Note Content!'});
+      // }else if (errors.title) {
+      //   this.setState({error: 'Missing Note Title!'});
+      // }
+      this.getErrorMessage(['title', 'content'], err);
     });
   }
 
@@ -78,10 +88,11 @@ class App extends Component {
     axios.post(urlFor(`notes/${noteId}/tags`), data)
     .then((res) => this.getNote(noteId) )
     .catch((err) => {
-      const {errors} = err.response.data;
-      if(errors.name){
-        this.setState({error: 'Misisng Tag Name!'});
-      }
+      // const {errors} = err.response.data;
+      // if(errors.name){
+      //   this.setState({error: 'Misisng Tag Name!'});
+      // }
+      this.getErrorMessage(['name'], err);
     });
   }
 
